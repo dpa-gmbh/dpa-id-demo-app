@@ -1,18 +1,23 @@
 import { fileURLToPath, URL } from 'node:url'
 
 import { defineConfig } from 'vite'
+// @ts-ignore
+import basicSsl from '@vitejs/plugin-basic-ssl'
 import vue from '@vitejs/plugin-vue'
-import vueJsx from '@vitejs/plugin-vue-jsx'
 
-// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    vue(),
-    vueJsx(),
-  ],
+  plugins: [basicSsl(), vue()],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
+  },
+  server: {
+    host: 'local.dpa-id-demo-app.de',
+    port: 3000
+  },
+  preview: {
+    host: 'local.dpa-id-demo-app.de',
+    port: 3000
   }
 })
