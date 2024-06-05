@@ -1,5 +1,4 @@
 <template>
-  <RouterView name="DemoHeader" />
   <main>
     <RouterView />
   </main>

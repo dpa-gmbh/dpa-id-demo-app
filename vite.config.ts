@@ -13,11 +13,11 @@ export default defineConfig({
     }
   },
   server: {
-    host: 'local.dpa-id-demo-app.de',
+    host: 'local.dpa-id-auth0-spa-demo-app.de',
     port: 3000
   },
   preview: {
-    host: 'local.dpa-id-demo-app.de',
+    host: 'local.dpa-id-auth0-spa-demo-app.de',
     port: 3000
   }
 })
