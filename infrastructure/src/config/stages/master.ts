@@ -68,7 +68,7 @@ export class Master implements Configuration {
       deregistrationDelay: Duration.seconds(5),
       lbPriority:  getRandomInt(500, 600),
       imageTag: process.env.IMAGE_TAG,
-      stageSuffix: "devel",
+      stageSuffix: "master",
       environment: {
         "STAGE": "devel"
       }
