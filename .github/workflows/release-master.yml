@@ -1,0 +1,60 @@
+name: "Release: Master"
+on:
+  push:
+    branches:
+      - master
+
+env:
+  IMAGE: 202797282286.dkr.ecr.eu-central-1.amazonaws.com/dpa-id-auth0-spa-demo
+  IMAGE_TAG: ${{ github.sha }}
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone Repository
+        uses: actions/checkout@v4
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_DPA_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_DPA_ID }}
+          aws-region: eu-central-1
+      - name: AWS SSM to env
+        uses: dkershner6/aws-ssm-getparameters-action@v2
+        with:
+          parameterPairs: "/config/dpa-id-auth0-spa-demo/auth0ClientId = VITE_AUTH0_CLIENT_ID, /config/dpa-id-auth0-spa-demo/auth0Domain = VITE_AUTH0_DOMAIN"
+          withDecryption: "false" # defaults to true
+      - name: Docker registry login
+        uses: aws-actions/amazon-ecr-login@v2
+      - name: Build & publish Docker container
+        run: |
+          docker build -t ${{ env.IMAGE }}:${{ env.IMAGE_TAG }} --build-arg VITE_AUTH0_DOMAIN=$VITE_AUTH0_DOMAIN --build-arg VITE_AUTH0_CLIENT_ID=$VITE_AUTH0_CLIENT_ID .
+          docker push ${{ env.IMAGE }} --all-tags
+        env:
+          VITE_AUTH0_CLIENT_ID: ${{ env.VITE_AUTH0_CLIENT_ID }}
+          VITE_AUTH0_DOMAIN: ${{ env.VITE_AUTH0_DOMAIN }}
+  master:
+    name: Master
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      STAGE: master
+    steps:
+      - name: Clone Repository
+        uses: actions/checkout@v4
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_DPA_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_DPA_ID }}
+          aws-region: eu-central-1
+      - name: Install dependencies
+        working-directory: ./infrastructure
+        run: npm ci
+      - name: Run AWS CDK provisioning
+        working-directory: ./infrastructure
+        run: npm run cdk deploy -- --require-approval=never dpa-id-auth0-spa-demo-master
+
+
