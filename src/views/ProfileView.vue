@@ -1,7 +1,9 @@
 <template>
   <div class="flex flex-col">
     <DemoHeader />
-    <DemoProfile />
+    <Suspense>
+      <DemoProfile />
+    </Suspense>
   </div>
 </template>
 

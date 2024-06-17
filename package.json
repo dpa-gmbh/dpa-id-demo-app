@@ -18,6 +18,7 @@
     "@dpa-id-components/dpa-shared-components": "^9.4.3",
     "@dpa-it/dpa-id-partner-components-vue": "^3.0.8",
     "@vitejs/plugin-basic-ssl": "^1.1.0",
+    "axios": "^1.7.2",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
   },

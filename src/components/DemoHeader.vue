@@ -13,10 +13,10 @@
           v-if="isAuthenticated"
           class="m-1"
           :client-id="AUTH0_CLIENT_ID"
-          :firstname="user?.firstName"
-          :img-url="user?.hasAvatar ? user.image.src : undefined"
-          :initials="user?.initials"
-          :lastname="user?.lastName"
+          :firstname="auth0.user.value?.name"
+          :img-url="auth0.user.value?.hasAvatar ? auth0.user.value?.image.src : undefined"
+          :initials="auth0.user.value?.initials"
+          :lastname="auth0.user.value?.lastName"
           :overlay-right="'-7px'"
           :overlay-top="'16px'"
           :size="32"
@@ -34,13 +34,18 @@
 import { DpaIdAppswitcher, DpaIdUsericon } from '@dpa-it/dpa-id-partner-components-vue'
 import { useAuth0 } from '@auth0/auth0-vue'
 import { UiButton } from '@dpa-id-components/dpa-shared-components'
+import { computed } from 'vue'
 
 const AUTH0_CLIENT_ID = import.meta.env.VITE_AUTH0_CLIENT_ID
-const { isAuthenticated, user, logout, loginWithRedirect } = useAuth0()
+const auth0 = useAuth0()
 
-const login = () => loginWithRedirect()
+const isAuthenticated = computed(() => {
+  return !auth0.isLoading ? false : auth0.isAuthenticated.value
+})
+
+const login = () => auth0.loginWithRedirect()
 const logoutFunction = async () => {
-  await logout({ logoutParams: { returnTo: window.location.origin } })
+  await auth0.logout({ logoutParams: { returnTo: window.location.origin } })
 }
 </script>
 <style>
