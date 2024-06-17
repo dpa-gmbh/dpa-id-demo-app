@@ -24,7 +24,6 @@
           stage-auth0="dev"
           @logout="logoutFunction"
         ></DpaIdUsericon>
-        <UiButton v-else rounded size="small" @click="login">Log in</UiButton>
       </div>
     </div>
   </div>
@@ -33,7 +32,6 @@
 <script lang="ts" setup>
 import { DpaIdAppswitcher, DpaIdUsericon } from '@dpa-it/dpa-id-partner-components-vue'
 import { useAuth0 } from '@auth0/auth0-vue'
-import { UiButton } from '@dpa-id-components/dpa-shared-components'
 import { computed } from 'vue'
 
 const AUTH0_CLIENT_ID = import.meta.env.VITE_AUTH0_CLIENT_ID
@@ -43,7 +41,6 @@ const isAuthenticated = computed(() => {
   return !auth0.isLoading ? false : auth0.isAuthenticated.value
 })
 
-const login = () => auth0.loginWithRedirect()
 const logoutFunction = async () => {
   await auth0.logout({ logoutParams: { returnTo: window.location.origin } })
 }

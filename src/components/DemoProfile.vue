@@ -1,14 +1,14 @@
 <template>
-  <div class="mx-5 mt-20 flex min-h-[calc(100vh-180px)] flex-col pb-5 lg:mx-32 lg:mt-24 xl:pb-16">
+  <div
+    v-if="isAuthenticated"
+    class="mx-5 mt-20 flex min-h-[calc(100vh-180px)] flex-col pb-5 lg:mx-32 lg:mt-24 xl:pb-16"
+  >
     <div class="flex flex-col gap-6 items-center rounded-2xl bg-white p-6 shadow-default">
-      <h3 v-if="!isAuthenticated">
-        This is a single page demo application, please login to see the user and fetch the BE data
-      </h3>
-      <h1 v-if="isAuthenticated">Hi, {{ user?.given_name }}!</h1>
-      <UiButton v-if="isAuthenticated" rounded size="small" @click="callApi"
+      <h1>Hi, {{ user?.given_name }}!</h1>
+      <UiButton rounded size="small" @click="callApi"
         >Call a BE endpoint using Access Token</UiButton
       >
-      <h3>{{ responseFromBE }}</h3>
+      <h3>Response: {{ responseFromBE }}</h3>
     </div>
   </div>
 </template>
@@ -19,9 +19,7 @@ import axios from 'axios'
 import { ref } from 'vue'
 
 const { user, isAuthenticated, getAccessTokenSilently } = useAuth0()
-
 const accessToken = await getAccessTokenSilently()
-
 const responseFromBE = ref<string>()
 
 const axiosInstance = axios.create({
