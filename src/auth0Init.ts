@@ -5,7 +5,7 @@ export const auth0Init = createAuth0({
   clientId: import.meta.env.VITE_AUTH0_CLIENT_ID,
   authorizationParams: {
     redirect_uri: window.location.origin,
-    audience: 'https://demo-api'
+    audience: 'https://dpa-id-devel.eu.auth0.com/api/v2/'
   },
   useRefreshTokens: true
 })

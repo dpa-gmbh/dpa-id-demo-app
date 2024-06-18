@@ -8,7 +8,7 @@
       <UiButton rounded size="small" @click="callApi"
         >Call a BE endpoint using Access Token</UiButton
       >
-      <h3>Response: {{ responseFromBE }}</h3>
+      <h3 v-if="responseFromBE">Response: {{ responseFromBE }}</h3>
     </div>
   </div>
 </template>
